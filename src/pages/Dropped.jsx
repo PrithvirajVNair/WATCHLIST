@@ -46,32 +46,33 @@ const Dropped = () => {
 
   const handleEdit = async (updatedItem) => {
     try {
-
       const { id, ...dataWithoutId } = updatedItem;
 
-      if (updatedItem.status == 'planning') {
-        const result = await editListPlanningAPI(dataWithoutId)
-        const deleteData = await deleteListDroppedAPI(id)
+      // Update the item itself
+      await editListAPI(id, dataWithoutId);
+
+      // Move item to another list if status changed
+      if (updatedItem.status !== 'dropped') {
+        switch (updatedItem.status) {
+          case 'watching':
+            await editListWatchingAPI(dataWithoutId);
+            break;
+          case 'planning':
+            await editListPlanningAPI(dataWithoutId);
+            break;
+          case 'on-hold':
+            await editListOnHoldAPI(dataWithoutId);
+            break;
+          case 'completed':
+            await editListCompletedAPI(dataWithoutId);
+            break;
+        }
+        await deleteListDroppedAPI(id);
       }
 
-      if (updatedItem.status == 'watching') {
-        const result = await editListWatchingAPI(dataWithoutId)
-        const deleteData = await deleteListDroppedAPI(id)
-      }
-      if (updatedItem.status == 'completed') {
-        const result = await editListCompletedAPI(dataWithoutId)
-        const deleteData = await deleteListDroppedAPI(id)
-      }
-      if (updatedItem.status == 'on-hold') {
-        const result = await editListOnHoldAPI(dataWithoutId)
-        const deleteData = await deleteListDroppedAPI(id)
-      }
-      // if (updatedItem.status == 'dropped') {
-      //   const result = await editListDroppedAPI(dataWithoutId)
-      //   const deleteData = await deleteListDroppedAPI(id)
-      //   console.log(result);
-      // }
-      await getList()
+      // Fetch the latest Planning list
+      await getList();
+
     } catch (error) {
       console.log("Error while editing the list", error);
     }
@@ -132,7 +133,7 @@ const Dropped = () => {
                         <CardActions>
                           {/* <Edit eId={items.id} /> */}
                           <Button onClick={() => handleDelete(items.id)} size="small" sx={{ background: 'red' }} variant='contained'>Delete</Button>
-                          <Edit items={items}/>
+                          <Edit items={items} />
                         </CardActions>
                       </Card>
                     </div>

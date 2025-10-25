@@ -43,39 +43,46 @@ const Watching = () => {
   }
 
 
-  const handleEdit = async (updatedItem) => {
-    try {
+const handleEdit = async (updatedItem) => {
+  try {
+    const { id, ...dataWithoutId } = updatedItem;
 
-      const { id, ...dataWithoutId } = updatedItem;
+    // 1. Update the item itself
+    await editListAPI(id, dataWithoutId);
 
-      if (updatedItem.status == 'planning') {
-        const result = await editListPlanningAPI(dataWithoutId)
-        const deleteData = await deleteListWatchingAPI(id)
-        console.log(result);
-      }
-
-      // if (updatedItem.status == 'watching') {
-      //   const result = await editListWatchingAPI(dataWithoutId)
-      //   const deleteData = await deleteListPlanningAPI(id)
-      //   console.log(result);
-      // }
-      if (updatedItem.status == 'completed') {
-        const result = await editListCompletedAPI(dataWithoutId)
-        const deleteData = await deleteListWatchingAPI(id)
-      }
-      if (updatedItem.status == 'on-hold') {
-        const result = await editListOnHoldAPI(dataWithoutId)
-        const deleteData = await deleteListWatchingAPI(id)
-      }
-      if (updatedItem.status == 'dropped') {
-        const result = await editListDroppedAPI(dataWithoutId)
-        const deleteData = await deleteListWatchingAPI(id)
-      }
-      await getList()
-    } catch (error) {
-      console.log("Error while editing the list", error);
+    if (updatedItem.status !== 'watching') {
+    // 2. Handle moving between lists
+    switch (updatedItem.status) {
+      case 'planning':
+        await editListPlanningAPI(dataWithoutId);
+        break;
+      case 'completed':
+        await editListCompletedAPI(dataWithoutId);
+        break;
+      case 'on-hold':
+        await editListOnHoldAPI(dataWithoutId);
+        break;
+      case 'dropped':
+        await editListDroppedAPI(dataWithoutId);
+        break;
+      // If status is "watching", you can add it similarly:
+      // case 'watching':
+      //   await editListWatchingAPI(dataWithoutId);
+      //   await deleteListPlanningAPI(id); // or delete from another list if needed
+      //   break;
+      default:
+        break;
     }
+    await deleteListWatchingAPI(id);
   }
+    // 3. Refresh the current list to reflect changes
+    await getList();
+
+  } catch (error) {
+    console.log("Error while editing the list", error);
+  }
+};
+
 
 
   return (

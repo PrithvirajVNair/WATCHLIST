@@ -44,27 +44,33 @@ const Completed = () => {
 
   const handleEdit = async (updatedItem) => {
     try {
-
       const { id, ...dataWithoutId } = updatedItem;
 
-      if (updatedItem.status == 'planning') {
-        const result = await editListPlanningAPI(dataWithoutId)
-        const deleteData = await deleteListCompletedAPI(id)
+      // Update the item itself
+      await editListAPI(id, dataWithoutId);
+
+      // Move item to another list if status changed
+      if (updatedItem.status !== 'completed') {
+        switch (updatedItem.status) {
+          case 'watching':
+            await editListWatchingAPI(dataWithoutId);
+            break;
+          case 'planning':
+            await editListPlanningAPI(dataWithoutId);
+            break;
+          case 'on-hold':
+            await editListOnHoldAPI(dataWithoutId);
+            break;
+          case 'dropped':
+            await editListDroppedAPI(dataWithoutId);
+            break;
+        }
+        await deleteListCompletedAPI(id);
       }
 
-      if (updatedItem.status == 'watching') {
-        const result = await editListWatchingAPI(dataWithoutId)
-        const deleteData = await deleteListCompletedAPI(id)
-      }
-      if (updatedItem.status == 'on-hold') {
-        const result = await editListOnHoldAPI(dataWithoutId)
-        const deleteData = await deleteListCompletedAPI(id)
-      }
-      if (updatedItem.status == 'dropped') {
-        const result = await editListDroppedAPI(dataWithoutId)
-        const deleteData = await deleteListCompletedAPI(id)
-      }
-      await getList()
+      // Fetch the latest Planning list
+      await getList();
+
     } catch (error) {
       console.log("Error while editing the list", error);
     }
@@ -124,7 +130,7 @@ const Completed = () => {
                         <CardActions>
                           {/* <Edit eId={items.id} /> */}
                           <Button onClick={() => handleDelete(items.id)} size="small" sx={{ background: 'red' }} variant='contained'>Delete</Button>
-                          <Edit items={items}/>
+                          <Edit items={items} />
                         </CardActions>
                       </Card>
                     </div>

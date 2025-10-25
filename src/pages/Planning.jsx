@@ -50,33 +50,36 @@ const Planning = () => {
 
   const handleEdit = async (updatedItem) => {
     try {
-      // if (editData.status == 'planning') {
-      //   const result = await editListPlanningAPI(editData.id, editData)
-      //   console.log(result);
-      //   handleDelete()
-      // }
-      const { id, ...dataWithoutId } = updatedItem;
+    const { id, ...dataWithoutId } = updatedItem;
 
-      if (updatedItem.status == 'watching') {
-        const result = await editListWatchingAPI(dataWithoutId)
-        const deleteData = await deleteListPlanningAPI(id)
+    // Update the item itself
+    await editListAPI(id, dataWithoutId);
+
+    // Move item to another list if status changed
+    if (updatedItem.status !== 'planning') {
+      switch (updatedItem.status) {
+        case 'watching':
+          await editListWatchingAPI(dataWithoutId);
+          break;
+        case 'completed':
+          await editListCompletedAPI(dataWithoutId);
+          break;
+        case 'on-hold':
+          await editListOnHoldAPI(dataWithoutId);
+          break;
+        case 'dropped':
+          await editListDroppedAPI(dataWithoutId);
+          break;
       }
-      if (updatedItem.status == 'completed') {
-        const result = await editListCompletedAPI(dataWithoutId)
-        const deleteData = await deleteListPlanningAPI(id)
-      }
-      if (updatedItem.status == 'on-hold') {
-        const result = await editListOnHoldAPI(dataWithoutId)
-        const deleteData = await deleteListPlanningAPI(id)
-      }
-      if (updatedItem.status == 'dropped') {
-        const result = await editListDroppedAPI(dataWithoutId)
-        const deleteData = await deleteListPlanningAPI(id)
-      }
-      await getList()
-    } catch (error) {
-      console.log("Error while editing the list", error);
+      await deleteListPlanningAPI(id);
     }
+
+    // Fetch the latest Planning list
+    await getList();
+
+  } catch (error) {
+    console.log("Error while editing the list", error);
+  }
   }
 
 
