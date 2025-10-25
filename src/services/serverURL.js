@@ -1,0 +1,1 @@
+export const serverURL  ='https://watchlistt.onrender.com'
