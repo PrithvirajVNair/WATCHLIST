@@ -21,7 +21,11 @@ const List = () => {
 
   const getList = async () => {
     const result = await getListAPI()
-    setList(result.data)
+    if (result && Array.isArray(result.data)) {
+      setList(result.data)
+    } else {
+      setList([])
+    }
   }
 
   useEffect(() => {
@@ -58,43 +62,43 @@ const List = () => {
       <div className='background-inner'>
         <div className='container-fluid'>
           <div className='d-flex flex-column justify-content-center align-items-center text-white' style={{ minHeight: '100vh', paddingTop: '100px' }}>
-            
+
             <h1>Watch List</h1>
             <div className='row w-100'>
               {
-                list.length > 0 ?
-                list.map((items, index) => (
-                  <div key={index} className='col-12 col-sm-6 col-md-4 col-lg-3 mt-3 mb-3 d-flex justify-content-center align-items-center'>
-                    <Card sx={{ width: 350 }}>
-                      <CardContent>
-                        <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }} variant='div'>
-                          {/* {items.status} */}
-                        </Typography>
-                        <Typography variant="h5" component="div">
-                          {items.title}
-                        </Typography>
-                        <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>{items.genre}</Typography>
-                        <Typography variant="body2">
-                          <Rating name="half-rating-read" value={items.score} precision={0.5} readOnly/>{items.score? (items.score + '/5' ) : ' Not Rated'}
-                          
-                        </Typography>
-                        <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }} variant='div'>
-                          {items.sdate ? `Start Date Date : ${items.sdate}` : 'Start Date Date : Not Provided'}
-                          <br />
-                          {items.edate ? `End Date : ${items.edate}` : 'End Date Date : Not Provided'}
-                        </Typography>
-                      </CardContent>
-                      <CardActions>
-                        {/* <Edit eId={items.id} /> */}
-                        <Button onClick={() => handleDelete(items)} size="small" sx={{ background: 'red' }} variant='contained'>Delete</Button>
-                      </CardActions>
-                    </Card>
-                  </div>
-                ))
-                :
-                <Typography variant="h5" component="div" className='text-center'>
-                  No items in the list
-                </Typography>
+                Array.isArray(list) && list.length > 0 ?
+                  list.map((items, index) => (
+                    <div key={index} className='col-12 col-sm-6 col-md-4 col-lg-3 mt-3 mb-3 d-flex justify-content-center align-items-center'>
+                      <Card sx={{ width: 350 }}>
+                        <CardContent>
+                          <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }} variant='div'>
+                            {/* {items.status} */}
+                          </Typography>
+                          <Typography variant="h5" component="div">
+                            {items.title}
+                          </Typography>
+                          <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>{items.genre}</Typography>
+                          <Typography variant="body2">
+                            <Rating name="half-rating-read" value={items.score} precision={0.5} readOnly />{items.score ? (items.score + '/5') : ' Not Rated'}
+
+                          </Typography>
+                          <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }} variant='div'>
+                            {items.sdate ? `Start Date Date : ${items.sdate}` : 'Start Date Date : Not Provided'}
+                            <br />
+                            {items.edate ? `End Date : ${items.edate}` : 'End Date Date : Not Provided'}
+                          </Typography>
+                        </CardContent>
+                        <CardActions>
+                          {/* <Edit eId={items.id} /> */}
+                          <Button onClick={() => handleDelete(items)} size="small" sx={{ background: 'red' }} variant='contained'>Delete</Button>
+                        </CardActions>
+                      </Card>
+                    </div>
+                  ))
+                  :
+                  <Typography variant="h5" component="div" className='text-center'>
+                    No items in the list
+                  </Typography>
               }
             </div>
           </div>
