@@ -38,7 +38,6 @@ const Add = () => {
     const navigate = useNavigate();
     const [genre, setGenre] = useState('select')
     const [status, setStatus] = useState('select')
-    console.log(genre);
 
 
 
@@ -53,7 +52,6 @@ const Add = () => {
         sdate: '',
         edate: ''
     })
-    console.log(data);
 
 
     const handleAddList = async () => {
@@ -90,7 +88,6 @@ const Add = () => {
                 return;
             }
             const result = await addListAPI(data)
-            console.log(result);
 
             if (data.status == "planning") {
                 const planningData = await addListPlanningAPI(result.data)
@@ -125,7 +122,6 @@ const Add = () => {
             })
         }
     }
-    console.log(typeof handleAddList);
 
 
 

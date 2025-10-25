@@ -17,22 +17,10 @@ const Completed = () => {
 
     const [list, setList] = useState([])
         
-          const [editData, setEditData] = useState({
-            title: '',
-            score: '',
-            genre: '',
-            status: '',
-            sdate: '',
-            edate: ''
-          })
-        
         
           const getList = async () => {
             const result = await getListCompletedAPI()
-            console.log(result);
             setList(result.data)
-            console.log(list);
-        
           }
         
           useEffect(() => {
@@ -57,23 +45,19 @@ const Completed = () => {
               if (updatedItem.status == 'planning') {
                 const result = await editListPlanningAPI(dataWithoutId)
                 const deleteData = await deleteListCompletedAPI(id)
-                console.log(result);
               }
         
               if (updatedItem.status == 'watching') {
                 const result = await editListWatchingAPI(dataWithoutId)
                 const deleteData = await deleteListCompletedAPI(id)
-                console.log(result);
               }
               if (updatedItem.status == 'on-hold') {
                 const result = await editListOnHoldAPI(dataWithoutId)
                 const deleteData = await deleteListCompletedAPI(id)
-                console.log(result);
               }
               if (updatedItem.status == 'dropped') {
                 const result = await editListDroppedAPI(dataWithoutId)
                 const deleteData = await deleteListCompletedAPI(id)
-                console.log(result);
               }
               await getList()
             } catch (error) {
@@ -124,7 +108,7 @@ const Completed = () => {
                         </Typography>
                         <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>{items.genre}</Typography>
                         <Typography variant="body2">
-                          <Rating name="half-rating-read" value={items.score} precision={0.5} readOnly />
+                          <Rating name="half-rating-read" value={items.score} precision={0.5} readOnly />{items.score? (items.score + '/5' ) : ' Not Rated'}
                         </Typography>
                         <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }} variant='div'>
                           {items.sdate ? `Start Date Date : ${items.sdate}` : 'Start Date Date : Not Provided'}

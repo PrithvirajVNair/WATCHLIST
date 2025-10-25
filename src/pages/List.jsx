@@ -21,10 +21,7 @@ const List = () => {
 
   const getList = async () => {
     const result = await getListAPI()
-    console.log(result);
     setList(result.data)
-    console.log(list);
-
   }
 
   useEffect(() => {
@@ -71,14 +68,15 @@ const List = () => {
                     <Card sx={{ width: 350 }}>
                       <CardContent>
                         <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }} variant='div'>
-                          {items.status}
+                          {/* {items.status} */}
                         </Typography>
                         <Typography variant="h5" component="div">
                           {items.title}
                         </Typography>
                         <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>{items.genre}</Typography>
                         <Typography variant="body2">
-                          <Rating name="half-rating-read" value={items.score} precision={0.5} readOnly />
+                          <Rating name="half-rating-read" value={items.score} precision={0.5} readOnly/>{items.score? (items.score + '/5' ) : ' Not Rated'}
+                          
                         </Typography>
                         <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }} variant='div'>
                           {items.sdate ? `Start Date Date : ${items.sdate}` : 'Start Date Date : Not Provided'}
