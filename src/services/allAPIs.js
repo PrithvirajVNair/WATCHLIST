@@ -131,6 +131,36 @@ export const deleteListDroppedAPI = async(id)=>{
 export const deleteListOnHoldAPI = async(id)=>{
     return await commonAPI('delete',`${serverURL}/onhold/${id}`,"")
 }
+// update A List :
+
+export const editListDateAPI = async(id,reqBody)=>{
+    return await commonAPI('put',`${serverURL}/list/${id}`,reqBody)
+}
+// update A List :
+
+export const editListDatePlanningAPI = async(id,reqBody)=>{
+    return await commonAPI('put',`${serverURL}/planning/${id}`,reqBody)
+}
+// update A List :
+
+export const editListDateWatchingAPI = async(id,reqBody)=>{
+    return await commonAPI('put',`${serverURL}/watching/${id}`,reqBody)
+}
+// update A List :
+
+export const editListDateCompletedAPI = async(id,reqBody)=>{
+    return await commonAPI('put',`${serverURL}/completed/${id}`,reqBody)
+}
+// update A List :
+
+export const editListDateOnHoldAPI = async(id,reqBody)=>{
+    return await commonAPI('put',`${serverURL}/onhold/${id}`,reqBody)
+}
+// update A List :
+
+export const editListDateDroppedAPI = async(id,reqBody)=>{
+    return await commonAPI('put',`${serverURL}/dropped/${id}`,reqBody)
+}
 // // delete history :
 
 // export const deleteHistoryAPI = async(id)=>{

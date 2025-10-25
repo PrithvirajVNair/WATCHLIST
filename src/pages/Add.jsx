@@ -106,7 +106,7 @@ const Add = () => {
             }
             Swal.fire({
                 title: 'Success',
-                text: 'Resume Created Successfully',
+                text: 'Show Added Successfully',
                 icon: 'success',
                 confirmButtonText: 'back'
             })

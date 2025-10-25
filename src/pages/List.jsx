@@ -12,6 +12,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
+import Edit from '../components/Edit';
 
 
 const List = () => {
@@ -91,6 +92,7 @@ const List = () => {
                         <CardActions>
                           {/* <Edit eId={items.id} /> */}
                           <Button onClick={() => handleDelete(items)} size="small" sx={{ background: 'red' }} variant='contained'>Delete</Button>
+                          <Edit items={items}/>
                         </CardActions>
                       </Card>
                     </div>
